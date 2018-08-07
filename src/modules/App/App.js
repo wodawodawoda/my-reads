@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
+import { Route, Link } from 'react-router-dom'
 import './App.css';
 
-import { getAll } from '../../_utils/BooksAPI';
-import Shelf from '../Shelf/Shelf';
-import Book from '../Book/Book';
+import { getAll, search } from '../../_utils/BooksAPI';
+import Shelfs from '../Shelf/Shelfs';
+import Search from '../Search/Search'
+import TopNav from '../TopNav/TopNav'
 
 class App extends Component {
 	state = {
-		shelfs: {}
+		shelfs: {},
+		books: [],
 	}
 
 	componentDidMount = () => {
@@ -24,15 +27,24 @@ class App extends Component {
 			.catch(console.error)
 	}
 
+	handleSearch = (e) => {
+		const query = e.target.value
+		search(query)
+			.then(books => this.setState({
+				books: books === undefined || books.error ? [] : books
+			}))
+			.catch(console.error)
+	}
+
 	render() {
-		const { shelfs } = this.state
+		const { shelfs, books } = this.state
+		const { handleSearch } = this
+		const isSearch = this.props.location.pathname === '/search'
     return (
-      <div className="App">
-				{Object.keys(shelfs).map(name => (
-					<Shelf key={name} name={name}>
-						{shelfs[name].map(book => <Book key={book.id} data={book}/>)}
-					</Shelf>
-				))}
+      <div className="app">
+				<TopNav isSearch={isSearch} handleSearch={handleSearch}/>
+				<Route exact path={'/'} render={() => <Shelfs shelfs={shelfs} /> }/>
+				<Route path={'/search'} render={() => <Search books={books} /> } />
       </div>
     );
   }

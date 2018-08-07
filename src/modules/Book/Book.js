@@ -2,7 +2,7 @@ import React from 'react';
 import './Book.css'
 
 const Book = ({ data }) => {
-	const { imageLinks, title, authors } = data
+	const { imageLinks='', title='', authors=[] } = data
 	return(
 		<li className="book">
 			<details className="book__details"
