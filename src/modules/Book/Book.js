@@ -1,7 +1,7 @@
 import React from 'react';
 import './Book.css'
 
-const Book = ({ data }) => {
+const Book = ({ data, children }) => {
 	const { imageLinks='', title='', authors=[] } = data
 	return(
 		<li className="book">
@@ -14,6 +14,7 @@ const Book = ({ data }) => {
 				</address>
 			</details>
 			<img className="book__image" src={imageLinks.thumbnail} alt={title}/>
+			{children}
 		</li>
 	);
 }

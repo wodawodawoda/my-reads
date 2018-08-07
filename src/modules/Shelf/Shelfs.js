@@ -1,13 +1,17 @@
 import React from 'react';
-import Shelf from './Shelf'
-import Book from '../Book/Book'
+import Shelf from './Shelf';
+import Books from '../Book/Books';
 
-const Shelfs = ({ shelfs={} }) => (
+const Shelfs = ({ shelfs={}, allBooks, handleShelfChange }) => (
 	Object.keys(shelfs).map(name => (
 		<Shelf key={name} name={name}>
-			{shelfs[name].map(book => <Book key={book.id} data={book}/>)}
+			<Books books={shelfs[name]}
+						 shelfs={Object.keys(shelfs)}
+						 allBooks={allBooks}
+						 handleShelfChange={handleShelfChange}
+			/>
 		</Shelf>
 	))
-)
+);
 
-export default Shelfs
+export default Shelfs;

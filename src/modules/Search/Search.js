@@ -1,11 +1,28 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './Search.css'
-import Book from '../Book/Book'
+import Books from '../Book/Books'
 
-const Search = ({ books }) => (
-	<ul className="search">
-		{books.map(book => <Book key={book.id} data={book} />)}
-	</ul>
-)
+class Search extends Component {
+	componentWillUnmount = () => {
+		/**
+		 * Reset search results when component unmount
+		 */
+		this.props.handleSearch()
+	}
+
+	render() {
+		const { books, shelfs, allBooks, handleShelfChange, myBooks } = this.props
+		return(
+			<ul className="search">
+				<Books books={books}
+							 shelfs={Object.keys(shelfs)}
+							 allBooks={allBooks}
+							 myBooks={myBooks}
+							 handleShelfChange={handleShelfChange}
+				/>
+			</ul>
+		)
+	}
+}
 
 export default Search
