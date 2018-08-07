@@ -1,0 +1,22 @@
+.book
+  display: flex
+  flex-flow: column
+  position: relative
+  width: 200px
+  margin-right: 20px
+  border: 3px solid
+  &__image
+    width: 100%
+  &__details
+    position: absolute
+    text-align: center
+    height: 100%
+    width: 100%
+    color: white
+    transition: 0.4s
+    &--open
+      background: rgba(0,0,0,0.75)
+  &__summary
+    mix-blend-mode: difference
+    font-weight: 900
+    cursor: pointer

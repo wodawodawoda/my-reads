@@ -1,12 +1,19 @@
 import React from 'react';
+import './Book.css'
 
 const Book = ({ data }) => {
 	const { imageLinks, title, authors } = data
 	return(
 		<li className="book">
-			<img src={imageLinks.thumbnail} alt={title}/>
-			<h3>{title}</h3>
-			{authors.map(author => authors.length > 1 ? `${author} ` : author)}
+			<details className="book__details"
+							 onToggle={e => e.target.classList.toggle('book__details--open')}>
+				<summary className="book__summary">Details</summary>
+				<h3 className="book__title">{title}</h3>
+				<address className="book__author">
+					{authors.map(author => authors.length > 1 ? `${author} ` : author)}
+				</address>
+			</details>
+			<img className="book__image" src={imageLinks.thumbnail} alt={title}/>
 		</li>
 	);
 }

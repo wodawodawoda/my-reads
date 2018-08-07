@@ -1,0 +1,22 @@
+.book {
+  display: flex;
+  flex-flow: column;
+  position: relative;
+  width: 200px;
+  margin-right: 20px;
+  border: 3px solid; }
+  .book__image {
+    width: 100%; }
+  .book__details {
+    position: absolute;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    color: white;
+    transition: 0.4s; }
+    .book__details--open {
+      background: rgba(0, 0, 0, 0.75); }
+  .book__summary {
+    mix-blend-mode: difference;
+    font-weight: 900;
+    cursor: pointer; }
