@@ -33,6 +33,10 @@ class App extends Component {
 			.catch(console.error)
 	}
 
+	/**
+	 * New book search handler. Fires up on search field in TopNav change.
+	 * @param e - event
+	 */
 	handleSearch = (e) => {
 		if(!e || !e.target.value) return this.setState({searches: []})
 		const query = e.target.value
@@ -48,6 +52,12 @@ class App extends Component {
 			})
 	}
 
+	/**
+	 * Handles adding new books to shelves and moving books between shelves. Fires up on select field change in BookManager component.
+	 * @param e - event
+	 * @param id - book id
+	 * @param shelf - initial elements shelf id
+	 */
 	handleShelfChange = (e, id, shelf='others') => {
 		const target = e.target.value || 'others'
 		const shelfs = this.state.shelfs
@@ -78,6 +88,7 @@ class App extends Component {
 	render() {
 		const { shelfs, allBooks, searches } = this.state
 		const { handleSearch, handleShelfChange } = this
+		{/* Change TopNav elements content on route change */}
 		const isSearch = this.props.location.pathname === '/search'
     return (
       <div className="app">

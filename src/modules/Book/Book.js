@@ -1,7 +1,9 @@
 import React from 'react';
 import './Book.css'
 
-const Book = ({ data, children }) => {
+const Book = ({ data,
+								children
+}) => {
 	const { imageLinks='', title='', authors=[] } = data
 	return(
 		<li className="book">
@@ -10,6 +12,7 @@ const Book = ({ data, children }) => {
 				<summary className="book__summary">Details</summary>
 				<h3 className="book__title">{title}</h3>
 				<address className="book__author">
+					{/* Check if there is more author than 1 and add white space when it is true */}
 					{authors.map(author => authors.length > 1 ? `${author} ` : author)}
 				</address>
 			</details>

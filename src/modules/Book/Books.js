@@ -2,7 +2,12 @@ import React from 'react';
 import Book from './Book';
 import BookManager from './BookManager'
 
-const Books = ({ books, shelfs, handleShelfChange, allBooks, myBooks={} }) => {
+const Books = ({ books,
+								 shelfs,
+								 handleShelfChange,
+								 allBooks,
+								 myBooks={}
+}) => {
 	return (
 		books.map(bookId =>
 			<Book key={bookId} data={allBooks[bookId]}>
