@@ -15,6 +15,7 @@
     all: unset;
     cursor: pointer;
     transition: 0.4s;
-    margin-left: auto; }
+    margin-left: auto;
+    font-size: 2em; }
     .top-nav__search:hover {
       color: gold; }

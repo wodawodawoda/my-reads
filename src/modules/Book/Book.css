@@ -13,9 +13,16 @@
     height: 100%;
     width: 100%;
     color: white;
-    transition: 0.4s; }
+    transition: 0.4s;
+    padding: 10px;
+    /* details element transition hack */ }
+    .book__details > *:not(summary) {
+      transition: 0.5s;
+      opacity: 0; }
     .book__details--open {
       background: rgba(0, 0, 0, 0.75); }
+      .book__details--open > * {
+        opacity: 1 !important; }
   .book__summary {
     mix-blend-mode: difference;
     font-weight: 900;
@@ -23,14 +30,53 @@
   .book__manager {
     appearance: none;
     width: 10%;
+    padding: 20px;
     position: absolute;
     bottom: 0;
-    right: 0;
+    right: 10px;
     border: 0;
-    color: transparent;
+    cursor: pointer;
     mix-blend-mode: difference;
     mask-image: url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129"><g><path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"/></g></svg>');
     mask-repeat: no-repeat;
     transition: 0.4s; }
-    .book__manager:hover {
+    .book__manager__option {
+      padding: 0 10px;
       background-color: gold; }
+
+.shelf .book {
+  margin: 20px 5px 10px 0;
+  transform: rotateY(30deg) skewY(5deg);
+  transition: 0.5s;
+  transform-style: preserve-3d;
+  perspective: 500px; }
+  .shelf .book:hover {
+    transform: rotateY(0deg); }
+  .shelf .book:hover:before {
+    transform: rotateY(-80deg) skewY(0deg);
+    left: -5%; }
+  .shelf .book:hover:after {
+    transform: rotateX(60deg) skewX(0deg);
+    left: 0; }
+  .shelf .book:before, .shelf .book:after {
+    transition: 0.5s;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8); }
+  .shelf .book:before {
+    content: '';
+    writing-mode: vertical-lr;
+    color: white;
+    width: 10%;
+    height: 99.5%;
+    left: -8%;
+    bottom: -0.6%;
+    transform: rotateY(20deg) skewY(-20deg);
+    z-index: -1; }
+  .shelf .book:after {
+    content: '';
+    width: 99%;
+    height: 5%;
+    left: -4%;
+    bottom: -2.5%;
+    transform: rotateX(20deg) skewX(-50deg);
+    z-index: -1; }

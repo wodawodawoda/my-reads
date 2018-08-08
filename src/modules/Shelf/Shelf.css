@@ -1,7 +1,6 @@
 .shelf {
   text-align: center;
-  background: url("http://localhost:3000/shelf.png") no-repeat;
-  background-position: center bottom;
+  background: url("http://localhost:3000/shelf.png") no-repeat center bottom;
   background-size: 100% 60px;
   padding-bottom: 50px;
   overflow: hidden; }
@@ -12,4 +11,8 @@
   .shelf__books {
     display: flex;
     align-items: flex-end;
-    overflow: auto; }
+    overflow-x: auto;
+    overflow-y: hidden;
+    position: relative;
+    transform-style: preserve-3d;
+    perspective: 1200px; }
