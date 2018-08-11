@@ -1,0 +1,33 @@
+.spinner {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center; }
+  .spinner__animate {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: 4px solid black;
+    border-top: 4px solid black;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+    position: relative;
+    border-radius: 50%;
+    animation: spin 1s reverse linear infinite forwards; }
+    .spinner__animate:after {
+      content: '';
+      position: absolute;
+      width: 50%;
+      height: 50%;
+      border-radius: 50%; }
+    .spinner__animate:after {
+      border-bottom: 4px solid black;
+      border-right: 4px solid black;
+      animation: spin 1s infinite alternate; }
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(359deg); } }

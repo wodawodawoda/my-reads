@@ -1,12 +1,11 @@
 import React from 'react';
 import './Book.css'
+import LazyImg from '../../_utils/LazyImg'
 
-const Book = ({ data,
-								children
-}) => {
-	const { imageLinks='', title='', authors=[] } = data
+const Book = ({ data, children }) => {
+	const { imageLinks={}, title='', authors=[] } = data
 	return(
-		<li className="book">
+		<li id={data.id} className="book">
 			<details className="book__details"
 							 onToggle={e => e.target.classList.toggle('book__details--open')}>
 				<summary className="book__summary">Details</summary>
@@ -16,7 +15,7 @@ const Book = ({ data,
 					{authors.map(author => authors.length > 1 ? `${author} ` : author)}
 				</address>
 			</details>
-			<img className="book__image" src={imageLinks.thumbnail} alt={title}/>
+			<LazyImg className="book__image" src={imageLinks.thumbnail} alt={title} />
 			{children}
 		</li>
 	);

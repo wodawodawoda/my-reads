@@ -9,7 +9,7 @@ const TopNav = ({isSearch, handleSearch}) => (
 			<input className="top-nav__input"
 						 type="text"
 						 placeholder="Search by title or author"
-						 onChange={(e) => handleSearch(e)}
+						 onChange={(e) => handleSearch(e.target.value)}
 			/>
 		}/>
 		<Link to={isSearch ? '/' : 'search'}

@@ -1,54 +1,51 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
-import { Route } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import './App.css';
 
 import { getAll, search, update } from '../../_utils/BooksAPI';
 import Shelfs from '../Shelf/Shelfs';
 import Search from '../Search/Search'
 import TopNav from '../TopNav/TopNav'
+import Spinner from '../../_utils/Spinner'
 
 class App extends Component {
 	state = {
-		shelfs: {},
-		allBooks: {},
-		searches: {}
+		shelves: {},
+		books: {},
+		searches: [],
+		isLoading: true,
+		error: null
 	}
 
 	componentDidMount = () => {
+		this.setState({isLoading: true})
 		getAll()
-			.then(books => {
-				const allBooks = {}
-				const shelfs = {}
-				/**
-				 * Split all books in one loop to "allBooks" dictionary and "shelfs" object of arrays on App component mount.
-				 * I've done it to avoid using multiple filters later in each shelf component.
-				 */
-				books.forEach(book => {
-					allBooks[book.id] = book
-					shelfs[book.shelf] = shelfs[book.shelf] ? [...shelfs[book.shelf], book.id] : [book.id]
+			.then(res => {
+				const shelves = {}
+				const books = {}
+				res.forEach(book => {
+					shelves[book.shelf] ? shelves[book.shelf].push(book.id) : shelves[book.shelf] = [book.id]
+					books[book.id] = book
 				})
-				this.setState({ shelfs, allBooks })
+				this.setState({ books, shelves })
+				this.setState({ isLoading: false })
 			})
-			.catch(console.error)
+			.catch(error => this.setState({error, isLoading: false}))
 	}
 
 	/**
 	 * New book search handler. Fires up on search field in TopNav change.
 	 * @param e - event
 	 */
-	handleSearch = (e) => {
-		if(!e || !e.target.value) return this.setState({searches: []})
-		const query = e.target.value
-		const searches = {}
+	handleSearch = (query) => {
+		if(query === 'reset') return this.setState({searches: []})
+		this.setState({isLoading: true})
 		search(query)
-			.then(books => {
-				books.forEach(book => searches[book.id] = book)
-				this.setState({searches})
-			})
-			.catch(err => {
-				console.error(err)
-				this.setState({searches: []})
+			.then(searches => this.setState({searches, isLoading: false}))
+			.catch(error => {
+				console.error(error)
+				this.setState({searches: [], isLoading: false, error})
 			})
 	}
 
@@ -58,56 +55,50 @@ class App extends Component {
 	 * @param id - book id
 	 * @param shelf - initial elements shelf id
 	 */
-	handleShelfChange = (e, id, shelf='others') => {
-		const target = e.target.value || 'others'
-		const shelfs = this.state.shelfs
-		const allBooks = this.state.allBooks
-		const searches = this.state.searches
-		console.log(id, target, shelf)
-		/**
-		 * Update book item "shelf" property
-		 */
-		allBooks[id] ? allBooks[id].shelf = target : allBooks[id] = searches[id]
-
-		/**
-		 * API didn't let me to reset "shelf" property to empty string or undefined, so
-		 * I have to check if shelf exist and target isn't artificial 'others' shelf
-		 * used only for deleting book from users My Reads books before updating local state.
-		 */
-		if(shelfs[shelf]) shelfs[shelf] = shelfs[shelf].filter(bookId => id !== bookId)
-		if(target !== 'others') {
-			shelfs[target] = [...shelfs[target], id]
-		}
-		this.setState({shelfs, allBooks})
-		/**
-		 * Update DB
-		 */
-		update({id} , target)
+	handleShelfChange = (book, shelf, element) => {
+		const { id } = book
+		element.closest('.book').style.opacity = 0.5
+		update({id}, shelf)
+			.then(shelves => {
+				const { books } = this.state
+				books[id] ? books[id].shelf = shelf : books[id] = book
+				this.setState({ books, shelves })
+				element.closest('.book').style.opacity = 1
+			})
+			.catch(error => {
+				element.closest('.book').style.opacity = 1
+				console.error(error)
+			})
 	}
 
 	render() {
-		const { shelfs, allBooks, searches } = this.state
+		const { shelves, books, searches, isLoading } = this.state
 		const { handleSearch, handleShelfChange } = this
-		{/* Change TopNav elements content on route change */}
+		/* Change TopNav elements content on route change */
 		const isSearch = this.props.location.pathname === '/search'
-    return (
+		return (
       <div className="app">
 				<TopNav isSearch={isSearch} handleSearch={handleSearch}/>
-				<Route exact path={'/'} render={() =>
-					<Shelfs handleShelfChange={handleShelfChange}
-									allBooks={allBooks}
-									shelfs={shelfs}
-					/>
-				}/>
-				<Route path={'/search'} render={() =>
-					<Search books={Object.keys(searches)}
-									shelfs={shelfs}
-									allBooks={searches}
-									myBooks={allBooks}
-									handleShelfChange={handleShelfChange}
-									handleSearch={handleSearch}
-					/>
-				} />
+				{isLoading ?
+					<Spinner size="80px" top="60px" /> :
+					<Switch>
+						<Route exact path={'/'} render={() =>
+							<Shelfs handleShelfChange={handleShelfChange}
+											books={books}
+											shelves={shelves}
+							/>
+						}/>
+						<Route path={'/search'} render={() =>
+							<Search searches={searches}
+											books={books}
+											handleShelfChange={handleShelfChange}
+											handleSearch={handleSearch}
+											shelvesNames={Object.keys(shelves)}
+											isLoading={isLoading}
+							/>
+						} />
+					</Switch>
+				}
       </div>
     );
   }

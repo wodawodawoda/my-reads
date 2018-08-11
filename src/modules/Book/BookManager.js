@@ -1,18 +1,18 @@
 import React from 'react';
 import camelCaseReader from '../../_utils/camelCaseReader'
 
-const BookManager = ({ shelfs,
-											 id,
+const BookManager = ({ shelves,
+											 book,
 											 shelf,
 											 handleShelfChange
 }) => (
-		<select onChange={e => handleShelfChange(e, id, shelf)}
+		<select onChange={e => handleShelfChange(book, e.target.value, e.target)}
 						name="selectShelf"
 						id="bookManager"
 						className="book__manager"
 						defaultValue={shelf ? shelf : 'others'}
 		>
-			{shelfs.map(shelf =>
+			{shelves.map(shelf =>
 				<option className="book__option"
 								key={shelf}
 								value={shelf}

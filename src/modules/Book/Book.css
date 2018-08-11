@@ -4,7 +4,8 @@
   position: relative;
   min-width: 200px;
   max-width: 200px;
-  margin-right: 20px; }
+  margin-right: 20px;
+  transition: 0.4s; }
   .book__image {
     width: 100%; }
   .book__details {
@@ -46,37 +47,7 @@
 
 .shelf .book {
   margin: 20px 5px 10px 0;
-  transform: rotateY(30deg) skewY(5deg);
-  transition: 0.5s;
-  transform-style: preserve-3d;
-  perspective: 500px; }
+  transform: rotateY(30deg) skewY(3deg);
+  transition: 0.5s; }
   .shelf .book:hover {
     transform: rotateY(0deg); }
-  .shelf .book:hover:before {
-    transform: rotateY(-80deg) skewY(0deg);
-    left: -5%; }
-  .shelf .book:hover:after {
-    transform: rotateX(60deg) skewX(0deg);
-    left: 0; }
-  .shelf .book:before, .shelf .book:after {
-    transition: 0.5s;
-    position: absolute;
-    background: rgba(0, 0, 0, 0.8); }
-  .shelf .book:before {
-    content: '';
-    writing-mode: vertical-lr;
-    color: white;
-    width: 10%;
-    height: 99.5%;
-    left: -8%;
-    bottom: -0.6%;
-    transform: rotateY(20deg) skewY(-20deg);
-    z-index: -1; }
-  .shelf .book:after {
-    content: '';
-    width: 99%;
-    height: 5%;
-    left: -4%;
-    bottom: -2.5%;
-    transform: rotateX(20deg) skewX(-50deg);
-    z-index: -1; }
