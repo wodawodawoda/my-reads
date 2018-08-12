@@ -8,6 +8,7 @@ import Shelfs from '../Shelf/Shelfs';
 import Search from '../Search/Search'
 import TopNav from '../TopNav/TopNav'
 import Spinner from '../../_utils/Spinner'
+import debounce from '../../_utils/debounce'
 
 class App extends Component {
 	state = {
@@ -15,7 +16,7 @@ class App extends Component {
 		books: {},
 		searches: [],
 		isLoading: true,
-		error: null
+		error: null,
 	}
 
 	componentDidMount = () => {
@@ -36,17 +37,26 @@ class App extends Component {
 
 	/**
 	 * New book search handler. Fires up on search field in TopNav change.
-	 * @param e - event
+	 * @param query - string
 	 */
+
 	handleSearch = (query) => {
 		if(query === 'reset') return this.setState({searches: []})
 		this.setState({isLoading: true})
-		search(query)
-			.then(searches => this.setState({searches, isLoading: false}))
-			.catch(error => {
-				console.error(error)
-				this.setState({searches: [], isLoading: false, error})
-			})
+		const debounceCallback = () => {
+			search(query)
+				.then(searches => {
+					if(searches.error) throw searches.error
+					this.setState({searches, isLoading: false})
+				})
+				.catch(error => {
+					this.setState({
+						searches: [{id: 'error', title: `No books found`}],
+						isLoading: false, error
+					})
+				})
+		}
+		debounce(debounceCallback, 500, this)
 	}
 
 	/**
@@ -60,7 +70,8 @@ class App extends Component {
 		element.closest('.book').style.opacity = 0.5
 		update({id}, shelf)
 			.then(shelves => {
-				const { books } = this.state
+				// Create state.books copy to not mutating component state directly
+				const books = {...this.state.books}
 				books[id] ? books[id].shelf = shelf : books[id] = book
 				this.setState({ books, shelves })
 				element.closest('.book').style.opacity = 1
